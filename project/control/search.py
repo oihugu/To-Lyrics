@@ -1,17 +1,22 @@
 class Lyrics():
 
     def __init__(self, genius, music, artist):
-        artist = genius.search_artist(artist, max_songs = 0)
+        self.artist = genius.search_artist(artist, max_songs = 0)
         self.song = genius.search_song(music, artist.name)
         genius.remove_section_headers = True
         genius.verbose = True
         genius.skip_non_songs = True
 
     def getLyrics(self):
-        lyric_list = [line for line in self.song.lyrics.split('\n')]
+        try:
+            lyric_list = [line for line in self.song.lyrics.split('\n')]
+        except AttributeError:
+            raise NameError("Combination Of Music and Artist Not Found")
         
         lyric_dict = {
-            'number_of_lines' : (len(lyric_list) + 1)
+            'number_of_lines' : len(lyric_list),
+            'artist' : self.artist.capitalize(),
+            'song_name' : self.song.capitalize()
             }
         
         for line_number in range(len(lyric_list)):
